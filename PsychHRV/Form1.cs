@@ -23,10 +23,6 @@ namespace PsychHRV
             TUIBV1 behavior = new TUIBV1(this);
             dt.mBehaviorInst = behavior;
             dt.Start();
-            /*ThreadStart threadStart = new ThreadStart(dt.Start);
-            Thread thread = new Thread(threadStart);
-            thread.IsBackground = true;
-            thread.Start();*/
         }
     }
 }
