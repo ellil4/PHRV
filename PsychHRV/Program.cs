@@ -15,8 +15,8 @@ namespace PsychHRV
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Form1());
-            Application.Run(new FlashPanel());
+            Application.Run(new Form1());
+            //Application.Run(new FlashPanel());
         }
     }
 }

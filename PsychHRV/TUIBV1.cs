@@ -65,6 +65,10 @@ namespace PsychHRV
 
             mForm.amChartL2H.Series.Clear();
             mForm.amChartL2H.Series.Add(serL2H);
+
+            mForm.label5.Text = mDataSource[mDataSource.Count - 1].VLF + "," +
+                mDataSource[mDataSource.Count - 1].LF + "," + mDataSource[mDataSource.Count - 1].HF + ","
+                  + mDataSource[mDataSource.Count - 1].L2HF;
         }
 
         delegate void invokeDele();

@@ -8,7 +8,7 @@ using LibBinaryFile;
 
 namespace PsychHRV
 {
-    public class DataTick
+    public class DataTick//rebuild
     {
         String mPath;
         System.Timers.Timer mTimer;
@@ -33,7 +33,7 @@ namespace PsychHRV
 
             //mReadTill = 0;
 
-            mTimer.Interval = 500;
+            mTimer.Interval = 1000;
             mTimer.AutoReset = true;
             mTimer.Elapsed += new ElapsedEventHandler(mTimer_Elapsed);
             mTimer.Start();
@@ -71,29 +71,34 @@ namespace PsychHRV
         private void mTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Reader tf = new Reader(64);
-            StDataSector dataSector = new StDataSector();
             //long curLen = 0;
 
             
             tf.Open(mPath);
 
-            if (tf.ReadUnitAt((int)mReadTill) > 0)
-            {
-                dataSector.Time = tf.GetUInt64InBuf(0);
-                dataSector.VLF = tf.GetDoubleInBuf(8);
-                dataSector.LF = tf.GetDoubleInBuf(16);
-                dataSector.HF = tf.GetDoubleInBuf(24);
-                dataSector.L2HF = tf.GetDoubleInBuf(32);
-                dataSector.RR1 = tf.GetDoubleInBuf(40);
-                dataSector.RR2 = tf.GetDoubleInBuf(48);
-                dataSector.RR3 = tf.GetDoubleInBuf(56);
+            List<byte[]> dataSpan = tf.ReadTillEnd(mReadTill);
 
-                mDataSource.Add(dataSector);
+            if(dataSpan.Count > 0)
+            {
+                for (int i = 0; i < dataSpan.Count; i++)
+                {
+                    StDataSector dataSector = new StDataSector();
+                    dataSector.Time = tf.GetUInt64InBuf(0, dataSpan[i]);
+                    dataSector.VLF = tf.GetDoubleInBuf(8, dataSpan[i]);
+                    dataSector.LF = tf.GetDoubleInBuf(16, dataSpan[i]);
+                    dataSector.HF = tf.GetDoubleInBuf(24, dataSpan[i]);
+                    dataSector.L2HF = tf.GetDoubleInBuf(32, dataSpan[i]);
+                    dataSector.RR1 = tf.GetDoubleInBuf(40, dataSpan[i]);
+                    dataSector.RR2 = tf.GetDoubleInBuf(48, dataSpan[i]);
+                    dataSector.RR3 = tf.GetDoubleInBuf(56, dataSpan[i]);
+
+                    mDataSource.Add(dataSector);
+                }
             }
 
             tf.Close();
 
-            mReadTill++;
+            mReadTill += dataSpan.Count;
 
             mBehaviorInst.UpdateUserInterface();            
         }

@@ -19,7 +19,7 @@ namespace PsychHRV
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            DataTick dt = new DataTick("HRV1.dat", 10);
+            DataTick dt = new DataTick("D:\\HRV1.dat", 10);
             TUIBV1 behavior = new TUIBV1(this);
             dt.mBehaviorInst = behavior;
             dt.Start();
